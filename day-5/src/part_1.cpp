@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <algorithm>
 
+int binary_search(std::vector<int> &v, int target);
+
 int main()
 {
     std::freopen("input/input.txt", "r", stdin);
@@ -44,11 +46,9 @@ int main()
         bool b = true;
         for (int i = 0; i < v.size() - 1; ++i)
         {
-            std::vector<int> &next = mp[v[i + 1]];
+            int pos = binary_search(mp[v[i]], v[i - 1]);
 
-            auto it = std::lower_bound(next.begin(), next.end(), v[i]);
-
-            if (it != next.end() && *it == v[i])
+            if (pos != -1)
             {
                 b = false;
                 break;
@@ -62,4 +62,26 @@ int main()
     }
 
     std::cout << ans << std::endl;
+}
+
+int binary_search(std::vector<int> &v, int target)
+{
+    int l = 0, r = v.size() - 1;
+    while (l <= r)
+    {
+        int m = (l + r) / 2;
+        if (v[m] > target)
+        {
+            r = m - 1;
+        }
+        else if (v[m] < target)
+        {
+            l = m + 1;
+        }
+        else
+        {
+            return m;
+        }
+    }
+    return -1;
 }
